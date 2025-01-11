@@ -1,7 +1,10 @@
 import React from "react";
 import { auth, provider, signInWithPopup, signOut } from "./firebase";
+import { useNavigate } from "react-router-dom"; // Corrected for react-router-dom v6
 
 const SignIn = () => {
+  const navigate = useNavigate();  // Use useNavigate for version 6+
+
   const handleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -24,18 +27,18 @@ const SignIn = () => {
         const data = await response.json();
         console.log("Response from backend:", data);
 
-        // If the role is admin, handle accordingly (e.g., redirect or show admin panel)
+        // If the role is admin, redirect to Admin Dashboard
         if (data.role === "admin") {
           console.log("User is an Admin");
-          // Redirect or show Admin panel
+          navigate("/admin-dashboard");  // Redirect to Admin Dashboard
         } else {
           console.log("User is not an Admin");
-          // Redirect or show regular user panel
+          navigate("/dashboard");  // Redirect to User Dashboard
         }
       } catch (error) {
         console.error("Error sending token to backend:", error);
       }
-      
+
     } catch (error) {
       console.error("Error signing in:", error);
     }
